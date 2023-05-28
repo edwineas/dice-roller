@@ -1,1 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Roller</title>
+    <link rel="shortcut icon" href="https://d1nhio0ox7pgb.cloudfront.net/_img/i_collection_png/256x256/plain/dice.png"
+        type="image/png">
+    <style>
+        body {
+            background-color: rgb(235, 103, 103);
+            display: flex;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: white;
+            width: fit-content;
+            padding: 20px;
+            border: 5px solid black;
+        }
+
+        .dice-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .dice {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            margin: 5px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+        }
+
+        .dice-dot {
+            --top: 0%;
+            --left: 0%;
+
+            width: 15px;
+            height: 15px;
+            background-color: black;
+            border-radius: 50%;
+
+            position: absolute;
+            top: var(--top);
+            left: var(--left);
+            transform: translateX(calc(var(--left) * -1)) translateY(calc(var(--top) * -1));
+
+        }
+
+        .roll-btn {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="dice-container"></div>
+        <div>
+            <input type="text" id="diceNo" placeholder="Enter the number of Dice">
+            <button type="button" class="roll-btn">Roll Dice</button>
+        </div>
+    </div>
+    <script>
+        function createDice(number) {
+            const dotPosition = {
+                1: [
+                    [50, 50]
+                ],
+                2: [
+                    [20, 20],
+                    [80, 80]
+                ],
+                3: [
+                    [20, 20],
+                    [50, 50],
+                    [80, 80]
+                ],
+                4: [
+                    [20, 20],
+                    [20, 80],
+                    [80, 20],
+                    [80, 80]
+                ],
+                5: [
+                    [20, 20],
+                    [20, 80],
+                    [50, 50],
+                    [80, 20],
+                    [80, 80]
+                ],
+                6: [
+                    [20, 20],
+                    [20, 80],
+                    [50, 20],
+                    [50, 80],
+                    [80, 20],
+                    [80, 80]
+                ]
+            };
+            const dice = document.createElement("div");
+            dice.classList.add("dice");
+            for (const dotPos of dotPosition[number]) {
+                const dot = document.createElement("div");
+                dot.classList.add("dice-dot");
+                dot.style.setProperty("--top", dotPos[0] + "%");
+                dot.style.setProperty("--left", dotPos[1] + "%");
+                dice.appendChild(dot);
+            }
+            return dice;
+        }
+        function randomize(diceContainer, numberOfDice) {
+            diceContainer.innerHTML = "";
+            for (let i = 0; i < numberOfDice; i++) {
+                const random = Math.floor(Math.random() * 6 + 1);
+                const dice = createDice(random);
+                diceContainer.appendChild(dice);
+            }
+        }
+        const diceContainer = document.querySelector(".dice-container");
+        const btnRollDice = document.querySelector(".roll-btn")
+
+        btnRollDice.addEventListener("click", () => {
+            const NUMBER_OF_DICE = document.getElementById("diceNo").value;
+            randomize(diceContainer, NUMBER_OF_DICE);
+        })
+        randomize(diceContainer, 2);
+    </script>
+</body>
+
+</html>
